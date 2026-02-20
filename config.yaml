@@ -1,0 +1,48 @@
+mode: paper                     # paper or live
+
+broker:
+  type: alpaca                  # alpaca | ibkr | robinhood
+  paper: true
+
+  # Alpaca
+  alpaca_api_key: ""
+  alpaca_secret_key: ""
+
+  # IBKR (TWS/IB Gateway running)
+  ib_host: "127.0.0.1"
+  ib_port: 7497                 # 7497 = paper, 7496 = live
+  ib_client_id: 1
+
+  # Robinhood (unofficial)
+  rh_username: ""
+  rh_password: ""
+
+strategies:
+  - name: sma_crossover
+    enabled: true
+    symbols: ["AAPL", "TSLA", "NVDA"]
+    interval: "5Min"
+    params:
+      fast: 50
+      slow: 200
+      rsi_period: 14
+      rsi_buy_threshold: 70
+      rsi_sell_threshold: 30
+
+  - name: macd_crossover
+    enabled: true
+    symbols: ["SPY", "QQQ"]
+    interval: "15Min"
+    params: {}
+
+  - name: bollinger_breakout
+    enabled: false
+    symbols: ["AMD"]
+    interval: "5Min"
+    params:
+      period: 20
+      std: 2.0
+
+risk_management:
+  max_position_size_pct: 5.0      # max % of equity per position
+  stop_loss_atr_multiplier: 2.0

@@ -1,0 +1,7 @@
+alpaca-py>=0.28.0
+ib_async>=2.0.0
+robin_stocks>=3.4.0
+pandas
+pandas-ta-classic>=0.3.0
+python-dotenv
+PyYAML
