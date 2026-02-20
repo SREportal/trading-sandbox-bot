@@ -1,0 +1,7 @@
+alpaca-py>=3.2.0
+ib_insync>=0.9.90
+robin_stocks>=3.4.0
+pandas
+pandas_ta
+python-dotenv
+PyYAML
