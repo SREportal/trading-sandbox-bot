@@ -1,5 +1,8 @@
 import yaml
+from pathlib import Path
 from dotenv import load_dotenv
+load_dotenv(dotenv_path=Path(__file__).parent / ".env", override=True)
+import os
 import asyncio
 import time
 
@@ -11,6 +14,7 @@ load_dotenv()
 
 with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
+
 
 async def main():
     broker = BrokerFactory.create(config)

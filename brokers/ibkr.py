@@ -1,4 +1,4 @@
-from ib_insync import *
+from ib_async import *
 from .base import BrokerBase
 import pandas as pd
 
