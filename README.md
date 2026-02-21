@@ -82,6 +82,12 @@ text- No quotes, no extra spaces.
 - `broker.type: alpaca`
 - Enable 1–2 strategies to begin
 
+## Running the Bot
+
+```bash
+conda activate trading-clean
+python run_bot.py
+
 Expected first output:
 text🚀 Trading Sandbox Bot started in PAPER mode
 Broker: ALPACA | Strategies: 2
@@ -93,12 +99,6 @@ Run selected strategies every ~60 seconds
 Print BUY / SELL / HOLD signals when conditions are met
 
 Note: Outside US market hours, you may see few or no new bars (normal). Change interval to "1Day" in config.yaml for always-available historical data during testing.
-
-## Running the Bot
-
-```bash
-conda activate trading-clean
-python run_bot.py
 
 ## Common Issues & Fixes
 
