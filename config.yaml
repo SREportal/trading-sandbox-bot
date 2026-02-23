@@ -1,48 +1,65 @@
-mode: paper                     # paper or live
+mode: paper                     # paper or live - ALWAYS start with paper!
 
 broker:
   type: alpaca                  # alpaca | ibkr | robinhood
   paper: true
 
-  # Alpaca
+  # Alpaca credentials (leave blank if using .env)
   alpaca_api_key: ""
   alpaca_secret_key: ""
 
-  # IBKR (TWS/IB Gateway running)
+  # IBKR (only needed if type: ibkr)
   ib_host: "127.0.0.1"
   ib_port: 7497                 # 7497 = paper, 7496 = live
   ib_client_id: 1
 
-  # Robinhood (unofficial)
+  # Robinhood (unofficial - avoid for stocks)
   rh_username: ""
   rh_password: ""
 
 strategies:
+  # ────────────────────────────────────────────────
+  # Aggressive SMA Crossover + RSI filter
+  # ────────────────────────────────────────────────
   - name: sma_crossover
     enabled: true
-    symbols: ["AAPL", "TSLA", "NVDA"]
-    interval: "5Min"
+    symbols: [
+      "SPY", "QQQ", "IWM",        # very liquid ETFs
+      "AAPL", "TSLA", "NVDA", "AMD", "META", "AMZN", "MSFT", "GOOGL",
+      "SMCI", "PLTR", "ARM", "INTC", "QCOM", "AVGO", "COST", "WMT", "XOM"
+    ]
+    interval: "1Min"              # very short → more frequent signals
     params:
-      fast: 50
-      slow: 200
+      fast: 13                    # aggressive short period
+      slow: 34                    # shorter long period
       rsi_period: 14
-      rsi_buy_threshold: 70
-      rsi_sell_threshold: 30
+      rsi_buy_threshold: 78       # looser → more buy signals
+      rsi_sell_threshold: 22      # looser → more sell signals
 
+  # ────────────────────────────────────────────────
+  # MACD Crossover (default params are already fairly responsive)
+  # ────────────────────────────────────────────────
   - name: macd_crossover
     enabled: true
-    symbols: ["SPY", "QQQ"]
-    interval: "15Min"
-    params: {}
+    symbols: [
+      "SPY", "QQQ", "IWM",
+      "AAPL", "TSLA", "NVDA", "AMD", "META", "AMZN", "MSFT",
+      "SMCI", "PLTR", "ARM"
+    ]
+    interval: "3Min"              # faster than 5Min, slower than 1Min
+    params: {}                    # default MACD (12,26,9) is aggressive enough
 
+  # ────────────────────────────────────────────────
+  # Bollinger Bands Breakout (optional – can be very aggressive)
+  # ────────────────────────────────────────────────
   - name: bollinger_breakout
-    enabled: false
-    symbols: ["AMD"]
-    interval: "5Min"
+    enabled: false                # enable if you want even more signals
+    symbols: ["TSLA", "NVDA", "SMCI", "PLTR", "AMD"]
+    interval: "1Min"
     params:
-      period: 20
-      std: 2.0
+      period: 15                  # shorter period = more sensitive
+      std: 1.8                    # tighter bands = more breakouts
 
 risk_management:
-  max_position_size_pct: 5.0      # max % of equity per position
-  stop_loss_atr_multiplier: 2.0
+  max_position_size_pct: 12.0     # more aggressive than 5% – careful!
+  stop_loss_atr_multiplier: 1.5   # tighter stops = more aggressive exits
