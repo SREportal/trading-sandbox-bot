@@ -46,7 +46,7 @@ strategies:
       "AAPL", "TSLA", "NVDA", "AMD", "META", "AMZN", "MSFT",
       "SMCI", "PLTR", "ARM"
     ]
-    interval: "3Min"              # faster than 5Min, slower than 1Min
+    interval: "5Min"              # Alpaca supports: 1Min, 5Min, 15Min, 1Hour, 1Day
     params: {}                    # default MACD (12,26,9) is aggressive enough
 
   # ────────────────────────────────────────────────
