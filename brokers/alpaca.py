@@ -79,3 +79,17 @@ class AlpacaBroker(BrokerBase):
         except Exception as e:
             print(f"[ACCOUNT FETCH FAILED] {str(e)}")
             raise
+
+    async def cancel_all_orders(self):
+        try:
+            result = self.trading.cancel_orders()
+            print(f"[STARTUP] Cancelled {len(result)} open order(s).")
+        except Exception as e:
+            print(f"[STARTUP] Cancel orders failed: {e}")
+
+    async def close_all_positions(self):
+        try:
+            self.trading.close_all_positions(cancel_orders=True)
+            print("[STARTUP] All positions closed.")
+        except Exception as e:
+            print(f"[STARTUP] Close positions failed: {e}")

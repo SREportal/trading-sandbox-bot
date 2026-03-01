@@ -40,4 +40,4 @@ conda run -n "${ENV_NAME}" pip install -q -r requirements.txt
 echo ""
 echo "▶️  Starting bot..."
 echo ""
-conda run -n "${ENV_NAME}" python run_bot.py
+conda run --no-capture-output -n "${ENV_NAME}" python -u run_bot.py

@@ -121,18 +121,28 @@ conda activate trading-clean
 python run_bot.py
 ```
 
-Expected first output:
+Expected output on startup:
 
 ```
 🚀 Trading Sandbox Bot started in PAPER mode
 Broker: ALPACA | Strategies: 2
+
+🔄 Daily startup routine...
+  → Cancelling all open orders...
+[STARTUP] Cancelled 0 open order(s).
+  → Closing all open positions...
+[STARTUP] All positions closed.
+  → Waiting 3s for orders to settle...
+  → Running initial strategy scan...
 Equity: $100000.00
+✅ Startup complete.
 ```
 
-The bot will then:
-- Fetch recent price data (bars)
-- Run selected strategies every ~60 seconds
-- Print BUY / SELL / HOLD signals when conditions are met
+**Every time the bot starts it will:**
+1. Cancel all pending/unfilled orders
+2. Close (sell) all open positions — starting each day flat
+3. Immediately scan all strategies and open fresh positions based on current signals
+4. Then continue scanning every 60 seconds
 
 > **Note:** Outside US market hours, you may see few or no new bars (normal). Change interval to `"1Day"` in `config.yaml` for always-available historical data during testing.
 
@@ -167,6 +177,7 @@ The bot will then:
 - Add Telegram/Discord alerts on signals
 - Create custom strategies in `strategies/` folder
 - Explore backtesting (future addition)
+- Add a `--no-flatten` flag to skip position clearing on restart
 
 ---
 

@@ -17,3 +17,11 @@ class BrokerBase(ABC):
     @abstractmethod
     async def get_account(self):
         pass
+
+    async def cancel_all_orders(self):
+        """Cancel all open orders. Override in brokers that support it."""
+        pass
+
+    async def close_all_positions(self):
+        """Close all open positions. Override in brokers that support it."""
+        pass
