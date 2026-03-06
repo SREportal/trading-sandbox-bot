@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-ENV_NAME="trading-clean"
 PYTHON_VERSION="3.11"
 
 echo "🚀 Trading Sandbox Bot — startup"
@@ -16,28 +15,29 @@ if [ ! -f ".env" ]; then
   exit 1
 fi
 
-# ── 2. Ensure conda is available ─────────────────────────────────────────────
-if ! command -v conda &>/dev/null; then
+# ── 2. Ensure uv is available ─────────────────────────────────────────────────
+if ! command -v uv &>/dev/null; then
   echo ""
-  echo "❌ conda not found. Please install Miniconda or Anaconda first:"
-  echo "   https://docs.conda.io/en/latest/miniconda.html"
+  echo "❌ uv not found. Install it with:"
+  echo "   curl -LsSf https://astral.sh/uv/install.sh | sh"
+  echo "   Then restart your terminal and re-run ./start.sh"
   exit 1
 fi
 
-# ── 3. Create conda env if it doesn't exist ──────────────────────────────────
-if conda env list | grep -q "^${ENV_NAME} "; then
-  echo "✅ Conda env '${ENV_NAME}' already exists."
+# ── 3. Create virtual environment if it doesn't exist ────────────────────────
+if [ ! -d ".venv" ]; then
+  echo "📦 Creating virtual environment (Python ${PYTHON_VERSION})..."
+  uv venv --python "${PYTHON_VERSION}"
 else
-  echo "📦 Creating conda env '${ENV_NAME}' (Python ${PYTHON_VERSION})..."
-  conda create -y -n "${ENV_NAME}" python="${PYTHON_VERSION}"
+  echo "✅ Virtual environment already exists."
 fi
 
 # ── 4. Install / update dependencies ─────────────────────────────────────────
 echo "📥 Installing dependencies..."
-conda run -n "${ENV_NAME}" pip install -q -r requirements.txt
+uv pip install -q -r requirements.txt
 
 # ── 5. Launch the bot ─────────────────────────────────────────────────────────
 echo ""
 echo "▶️  Starting bot..."
 echo ""
-conda run --no-capture-output -n "${ENV_NAME}" python -u run_bot.py
+uv run python -u run_bot.py

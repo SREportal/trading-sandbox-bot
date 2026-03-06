@@ -1,22 +1,21 @@
 .PHONY: setup run clean help
 
-ENV_NAME  = trading-clean
-PYTHON    = 3.11
+PYTHON = 3.11
 
 help:
 	@echo ""
 	@echo "  Trading Sandbox Bot"
 	@echo "  ───────────────────"
-	@echo "  make setup   Create conda env and install dependencies"
+	@echo "  make setup   Create virtual env and install dependencies"
 	@echo "  make run     Launch the bot"
-	@echo "  make clean   Remove the conda env"
+	@echo "  make clean   Remove the virtual env"
 	@echo ""
 
 setup:
-	@echo "📦 Creating conda env '$(ENV_NAME)' with Python $(PYTHON)..."
-	@conda create -y -n $(ENV_NAME) python=$(PYTHON) 2>/dev/null || true
+	@echo "📦 Creating virtual environment (Python $(PYTHON))..."
+	@uv venv --python $(PYTHON)
 	@echo "📥 Installing dependencies..."
-	@conda run -n $(ENV_NAME) pip install -q -r requirements.txt
+	@uv pip install -q -r requirements.txt
 	@echo "✅ Setup complete. Run 'make run' to start the bot."
 
 run:
@@ -25,9 +24,9 @@ run:
 		exit 1; \
 	fi
 	@echo "▶️  Starting Trading Sandbox Bot..."
-	@conda run -n $(ENV_NAME) python run_bot.py
+	@uv run python run_bot.py
 
 clean:
-	@echo "🗑  Removing conda env '$(ENV_NAME)'..."
-	@conda env remove -y -n $(ENV_NAME)
+	@echo "🗑  Removing virtual environment..."
+	@rm -rf .venv
 	@echo "✅ Done."
