@@ -3,7 +3,16 @@ class RiskManager:
         self.max_pct = config.get("max_position_size_pct", 5.0)
 
     def can_place_trade(self, account, symbol, signal):
-        return True  # add more rules later
+        try:
+            buying_power = float(getattr(account, 'buying_power', 0) or 0)
+            equity = float(getattr(account, 'equity', 100000) or 100000)
+            required = equity * (self.max_pct / 100)
+            if buying_power < required:
+                print(f"[SKIP] {symbol} — insufficient buying power (${buying_power:.2f} < ${required:.2f} needed)")
+                return False
+        except (ValueError, TypeError):
+            pass
+        return True
 
     def calculate_quantity(self, account, price: float):
         equity_str = getattr(account, 'equity', None)
